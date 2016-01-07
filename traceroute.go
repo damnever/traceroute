@@ -28,8 +28,16 @@ type ReturnArgs struct {
 }
 
 func main() {
+	flag.Usage = func() {
+		fmt.Printf("Usage:\n  sudo ./traceroute [options] <domain/ip>\nOptions:\n")
+		flag.PrintDefaults()
+	}
 	maxTTL := flag.Int("m", 30, "Set the max number of hops (max TTL to be reached). Default is 30")
 	flag.Parse()
+	if flag.NArg() != 1 {
+		flag.Usage()
+		return
+	}
 	host := flag.Args()[0]
 
 	addrs, err := net.LookupHost(host)
